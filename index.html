@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>File Upload to S3</title>
+  </head>
+  <body>
+    <h1>File Upload to S3</h1>
+    <form>
+      <input type="file" id="fileInput" />
+      <button type="button" onclick="uploadFile()">Upload</button>
+    </form>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.908.0.min.js"></script>
+    <script>
+      AWS.config.update({
+        accessKeyId: 'ID',
+        secretAccessKey: 'SECRET_KEY',
+        region: 'REGION',
+      });
+
+      function uploadFile() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+
+        if (file) {
+          var s3 = new AWS.S3();
+          var params = {
+            Bucket: 'BUCKET_TO_ADD',
+            Key: file.name,
+            Body: file,
+          };
+
+          s3.upload(params, function (err, data) {
+            if (err) {
+              console.log('Error:', err);
+            } else {
+              console.log('Upload Success:', data.Location);
+            }
+          });
+        } else {
+          console.log('No file selected');
+        }
+      }
+    </script>
+  </body>
+</html>
